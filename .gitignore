@@ -1,0 +1,9 @@
+# dependencies
+/node_modules
+/.vscode
+/android/build
+/android/app/build
+/android/.gradle
+/ios/build
+
+npm-debug.log*

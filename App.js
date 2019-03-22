@@ -5,6 +5,7 @@ import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import { MainNavigator } from './src/Routes';
 import { createAppContainer } from 'react-navigation';
+import CardScan from './src/components/CardScan';
 
 // const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
 // const store = createStoreWithMiddleware(reducer);
@@ -14,7 +15,7 @@ const AppContainer = createAppContainer(MainNavigator);
 type Props = {};
 export default class App extends Component<Props> {
   render() {
-    return <AppContainer />;
+    return <CardScan />;
   }
 }
 

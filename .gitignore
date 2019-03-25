@@ -7,3 +7,4 @@
 /ios/build
 
 npm-debug.log*
+.env

@@ -7,8 +7,10 @@ import {
   StyleSheet
 } from 'react-native';
 import { CardIOModule, CardIOUtilities } from 'react-native-awesome-card-io';
+import { fetchToken } from '../actions/PaymentActions';
+import { connect } from 'react-redux';
 
-export default class CardScan extends Component {
+class CardScan extends Component {
   componentWillMount() {
     if (Platform.OS === 'ios') {
       CardIOUtilities.preload();
@@ -17,8 +19,13 @@ export default class CardScan extends Component {
 
   scanCard() {
     CardIOModule.scanCard()
-      .then(card => {
-        console.log(card);
+      .then(data => {
+        let card = {};
+        card.number = data.cardNumber;
+        card.exp_month = data.expiryMonth;
+        card.exp_year = data.expiryYear;
+        card.cvv = data.cvv;
+        this.props.fetchToken(card);
       })
       .catch(() => {
         // the user cancelled
@@ -42,6 +49,17 @@ export default class CardScan extends Component {
     );
   }
 }
+
+mapStateToProps = state => {
+  return {
+    tokenId: state.tokenId
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  { fetchToken }
+)(CardScan);
 
 const styles = StyleSheet.create({
   container: {

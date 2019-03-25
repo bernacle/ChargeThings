@@ -6,16 +6,35 @@ import thunk from 'redux-thunk';
 import { MainNavigator } from './src/Routes';
 import { createAppContainer } from 'react-navigation';
 import CardScan from './src/components/CardScan';
+import Home from './src/components/Home';
+import reducer from './src/reducers';
 
-// const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
-// const store = createStoreWithMiddleware(reducer);
+const logger = store => next => action => {
+  console.group(action.type);
+  console.info('dispatching', action);
+  let result = next(action);
+  console.log('next state', store.getState());
+  console.groupEnd(action.type);
+  return result;
+};
+
+const createStoreWithMiddleware = applyMiddleware(logger, thunk)(createStore);
+const store = createStoreWithMiddleware(reducer);
 
 const AppContainer = createAppContainer(MainNavigator);
 
 type Props = {};
 export default class App extends Component<Props> {
   render() {
-    return <CardScan />;
+    console.log('oi eu sou o goku');
+
+    return (
+      <Provider store={store}>
+        <View style={{ flex: 1 }}>
+          <AppContainer />
+        </View>
+      </Provider>
+    );
   }
 }
 

@@ -7,9 +7,22 @@ const headers = {
 };
 
 export async function getToken(body) {
-  console.log(JSON.stringify(body));
-
   const response = await fetch(`${BASE_URL}/token`, {
+    method: 'POST',
+    headers: {
+      ...headers,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(body)
+  });
+  let data = await response.json();
+
+  return data;
+}
+
+export async function pay(body) {
+  console.log(body);
+  const response = await fetch(`${BASE_URL}/pay`, {
     method: 'POST',
     headers: {
       ...headers,

@@ -1,7 +1,8 @@
-import { GET_TOKEN_ID } from '../actions/types';
+import { GET_TOKEN_ID, DO_PAYMENT } from '../actions/types';
 
 const INITIAL_STATE = {
-  tokenId: ''
+  tokenId: '',
+  paymentResponse: {}
 };
 
 function paymentReducer(state = INITIAL_STATE, action) {
@@ -10,6 +11,12 @@ function paymentReducer(state = INITIAL_STATE, action) {
       return {
         ...state,
         tokenId: action.payload.id
+      };
+
+    case DO_PAYMENT:
+      return {
+        ...state,
+        paymentResponse: action.payload
       };
 
     default:

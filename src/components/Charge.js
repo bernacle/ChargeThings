@@ -4,13 +4,21 @@ import {
   Text,
   View,
   TouchableOpacity,
-  Platform
+  Platform,
+  TextInput
 } from 'react-native';
 import { CardIOModule, CardIOUtilities } from 'react-native-awesome-card-io';
-import { fetchToken } from '../actions/PaymentActions';
+import { fetchToken, doPayment } from '../actions/PaymentActions';
 import { connect } from 'react-redux';
 
 class Charge extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      amount: 0
+    };
+  }
+
   componentWillMount() {
     if (Platform.OS === 'ios') {
       CardIOUtilities.preload();
@@ -32,9 +40,32 @@ class Charge extends Component {
       });
   }
 
+  pay() {
+    const { tokenId } = this.props;
+    console.log(this.state.amount);
+    let paymentBody = {};
+    paymentBody.amount = this.state.amount;
+    paymentBody.currency = 'usd';
+    paymentBody.tokenId = tokenId;
+    paymentBody.description = 'Charge Things';
+    this.props.doPayment(paymentBody);
+  }
+
   render() {
+    const { amount } = this.state;
     return (
       <View style={styles.container}>
+        <TextInput
+          style={{
+            height: 40,
+            width: 300,
+            marginLeft: 40,
+            marginRight: 40,
+            borderColor: 'gray',
+            borderWidth: 1
+          }}
+          onChangeText={amount => this.setState({ amount })}
+        />
         <TouchableOpacity
           style={
             Platform.OS === 'ios'
@@ -45,6 +76,16 @@ class Charge extends Component {
         >
           <Text style={styles.submitBtnText}>Scan Card</Text>
         </TouchableOpacity>
+        <TouchableOpacity
+          style={
+            Platform.OS === 'ios'
+              ? styles.iosSubmitBtn
+              : styles.androidSubmitBtn
+          }
+          onPress={() => this.pay()}
+        >
+          <Text style={styles.submitBtnText}>Pay</Text>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -52,13 +93,14 @@ class Charge extends Component {
 
 mapStateToProps = state => {
   return {
-    tokenId: state.tokenId
+    tokenId: state.tokenId,
+    paymentResponse: state.paymentResponse
   };
 };
 
 export default connect(
   mapStateToProps,
-  { fetchToken }
+  { fetchToken, doPayment }
 )(Charge);
 
 const styles = StyleSheet.create({

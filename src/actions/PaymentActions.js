@@ -1,4 +1,4 @@
-import { DO_PAYMENT, GET_TOKEN_ID } from './types';
+import { DO_PAYMENT, GET_TOKEN_ID, ERROR } from './types';
 import * as API from '../utils/api';
 
 export const fetchToken = card => {
@@ -6,10 +6,9 @@ export const fetchToken = card => {
     API.getToken(card)
       .then(res => {
         dispatch({ type: GET_TOKEN_ID, payload: res });
-        console.log(res);
       })
       .catch(err => {
-        console.log(err);
+        //dispatch({ type: ERROR, payload: err });
       });
   };
 };

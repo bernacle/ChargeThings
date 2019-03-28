@@ -19,26 +19,13 @@ class Charge extends Component {
     };
   }
 
-  componentWillMount() {
-    if (Platform.OS === 'ios') {
-      CardIOUtilities.preload();
-    }
-  }
-
-  scanCard() {
-    CardIOModule.scanCard()
-      .then(data => {
-        let card = {};
-        card.number = data.cardNumber;
-        card.exp_month = data.expiryMonth;
-        card.exp_year = data.expiryYear;
-        card.cvv = data.cvv;
-        this.props.fetchToken(card);
-      })
-      .catch(() => {
-        // the user cancelled
-      });
-  }
+  static navigationOptions = {
+    title: 'Charge Things',
+    headerStyle: {
+      backgroundColor: '#8491A3'
+    },
+    headerTintColor: '#F7FFF6'
+  };
 
   pay() {
     const { tokenId } = this.props;
@@ -62,20 +49,14 @@ class Charge extends Component {
             marginLeft: 40,
             marginRight: 40,
             borderColor: 'gray',
-            borderWidth: 1
+            borderWidth: 1,
+            textAlign: 'center',
+            backgroundColor: '#F7FFF6',
+            borderWidth: 0.2,
+            color: '#8491A3'
           }}
           onChangeText={amount => this.setState({ amount })}
         />
-        <TouchableOpacity
-          style={
-            Platform.OS === 'ios'
-              ? styles.iosSubmitBtn
-              : styles.androidSubmitBtn
-          }
-          onPress={this.scanCard.bind(this)}
-        >
-          <Text style={styles.submitBtnText}>Scan Card</Text>
-        </TouchableOpacity>
         <TouchableOpacity
           style={
             Platform.OS === 'ios'
@@ -100,21 +81,21 @@ mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { fetchToken, doPayment }
+  { doPayment }
 )(Charge);
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: '#F7FFF6',
     justifyContent: 'center'
   },
   iosSubmitBtn: {
     width: 300,
-    backgroundColor: '#4286f4',
+    backgroundColor: '#87D68D',
     padding: 10,
-    borderRadius: 7,
-    height: 45,
+    borderRadius: 100,
+    height: 50,
     marginLeft: 40,
     marginRight: 40,
     marginTop: 10
